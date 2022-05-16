@@ -33,21 +33,6 @@ class Grafo:
         else:
             print("Aresta Inválida!")
 
-    # Função que determina se v é adjacente a u
-    def adjacente(self, u, v):
-        if self.mat_adj[u][v] != 0:
-            return True
-        else:
-            return False
-
-    # Função que retorna a lista dos vertices adjacentes a u
-    def adjacentes(self, u):
-        adj = []
-        for i in range(self.lista_adj[u]):
-            (v, w) = self.lista_adj[u][i]
-            adj.append(v)
-        return adj
-
     # Função que lê arquivo de grafo no formato DIMACS
     def ler_arquivo(self, nome_arq):
         try:
@@ -85,56 +70,57 @@ class Grafo:
 
     # Algoritmo de Dijkstra
     def dijkstra(self, s, t):
-        dist = [float("inf") for _ in range(len(self.lista_adj))]
-        pred = [None for _ in range(len(self.lista_adj))]
+        # vetor que armazena a distância de s a cada vértice
+        dist = [float("inf") for _ in range(len(self.lista_adj))] 
+        pred = [None for _ in range(len(self.lista_adj))] # vetor que armazena o predecessor de cada vértice
         dist[s] = 0
-        Q = [i for i in range(len(self.lista_adj))]
+        Q = [i for i in range(len(self.lista_adj))] # lista dos vértices a serem processados
 
         while len(Q) != 0:
-            u = self.menor_dist(dist, Q)
+            u = self.menor_dist(dist, Q) # u recebe o vértice de menor distância em Q
             Q.remove(u)
             for (v, w) in self.lista_adj[u]:
-
-                if(u == t):
+                if(u == t): # caso u for o vértice de destino, irá sair do for
                     break
-
-                if dist[v] > dist[u] + w:
+                if dist[v] > dist[u] + w: # checagem da distância de u para v
                     dist[v] = dist[u] + w
                     pred[v] = u
-        return (dist, pred)
+        return (dist, pred) # retorna os vetores dist e pred
 
     # Algoritmo de Bellman-Ford
     def bellman_ford(self, s):
+        # vetor que armazena a distância de s a cada vértice
         dist = [float("inf") for _ in range(len(self.lista_adj))]
-        pred = [None for _ in range(len(self.lista_adj))]
+        pred = [None for _ in range(len(self.lista_adj))] # vetor que armazena o predecessor de cada vértice
         dist[s] = 0
-        for i in range(0, self.num_vert-1):
-            trocou = False
+        for _ in range(0, self.num_vert-1): # for de 0 até o número de vértice menos 1
+            trocou = False                  # inserção da flag trocou para melhorar o desempenho
             for (u, v, w) in self.arestas:
-                if dist[v] > dist[u] + w:
+                if dist[v] > dist[u] + w: # checagem da distância de u para v
                     dist[v] = dist[u] + w
                     pred[v] = u
                     trocou = True
-            if trocou == False:
+            if trocou == False: # caso não ocorra mais trocas de distância e predecessor, sairá do for
                 break
-        return (dist, pred)
+        return (dist, pred) # retorna os vetores dist e pred
 
     # Algoritmo de Busca em Largura
     def busca_largura(self, s, t):
+        # vetor que armazena a distância de s a cada vértice
         dist = [float("inf") for _ in range(len(self.lista_adj))]
-        pred = [None for _ in range(len(self.lista_adj))]
+        pred = [None for _ in range(len(self.lista_adj))] # vetor que armazena o predecessor de cada vértice
         Q = [s]
         dist[s] = 0
         while len(Q) != 0:
-            u = Q.pop(0)
-            for (v, w) in self.lista_adj[u]:
+            u = Q.pop(0)                        # remove o primeiro elemento de Q
+            for (v, w) in self.lista_adj[u]:    # para cada v adjacente a u
                 if dist[v] == float("inf"):
                     Q.append(v)
                     dist[v] = dist[u] + 1
                     pred[v] = u
-                    if pred[t] != None:
+                    if pred[t] != None:     # caso o predecessor do vértice de destinno for diferente de NULL, sairá do for
                         break
-        return (dist, pred)
+        return (dist, pred) # retorna os vetores dist e pred
 
     # Função para recuperar o caminho entre um par de vértices s, t
     def recuperar_caminhos(self, s, t, pred):

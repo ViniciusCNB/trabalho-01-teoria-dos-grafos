@@ -37,12 +37,12 @@ match arquivo:
         result = G.bellman_ford(vertOrigem)
     case "USA-road-dt.NY.txt":
         print("Arquivo: USA-road-dt.NY.txt")
-        print("Algoritmo: ")
+        print("Algoritmo: Bellman-Ford")
         result = G.bellman_ford(vertOrigem)
     case "web-Google.txt":
         print("Arquivo: web-Google.txt")
-        print("Algoritmo: ")
-        result = G.dijkstra(vertOrigem, vertDestino)
+        print("Algoritmo: Bellman-Ford")
+        result = G.bellman_ford(vertOrigem)
 
 # Desestruturação da var result
 (dist, pred) = result
